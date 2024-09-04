@@ -1,0 +1,18 @@
+h1{
+    color: red;
+    font-family: "Nerko One", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.responsive{
+    max-width: 25%;
+    height: auto;
+}
+
+body{
+    background-color: cyan;
+    font-family: "Nerko One", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
