@@ -1,0 +1,34 @@
+.center{
+    margin: auto;
+  width: 50%;
+  border: 3px;
+  padding: 10px;
+}
+
+.centerText{
+    text-align: center;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+.poster{
+    max-width: 50%;
+    height: auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.videoYutus{
+    margin: auto;
+    width: 50%;
+    border: 3px;
+    padding: 10px;
+}
+
+.Justify{
+    text-align: justify;
+}
+.accordionCenter{
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-top: 3rem;
+}
