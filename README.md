@@ -9,3 +9,5 @@ Página Github Pages:  https://warcilac9.github.io/Practica5toSem/
 practica 4: https://warcilac9.github.io/Practica5toSem/practica%204/movie.html
 
 practica 5: https://warcilac9.github.io/Practica5toSem/practica5/index.html
+
+practica 6: https://warcilac9.github.io/Practica5toSem/practica6/index.html
