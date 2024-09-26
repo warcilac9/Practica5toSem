@@ -1,82 +1,207 @@
-// Instrucción 1
-let productos = [
-    { nombre: "Camiseta", precio: 15, stock: 10 },
-    { nombre: "Pantalones", precio: 25, stock: 8 },
-    { nombre: "Zapatos", precio: 50, stock: 5 },
-    { nombre: "Sombrero", precio: 10, stock: 20 },
-    ];
+const d = document;
+const $listaCarrito = d.querySelector("#lista-carrito");
+const $totalCarrito = d.querySelector("#total-carrito");
+const $btnCompra = d.querySelector("#btn-compra");
+const $mensajeCompra = d.querySelector("#mensaje-compra");
+const $carrito = d.querySelector("#carrito");
+const $loader = d.querySelector('#loader');
 
-  // Instrucción 2
-    let carrito = [];
+let productIDs = [];
 
-function agregarAlCarrito(productoNombre, cantidad) {
-    for (let producto of productos) {
-        if (producto.nombre === productoNombre) {
-            if (producto.stock >= cantidad) {
-            carrito.push({
-            nombre: productoNombre,
-            cantidad: cantidad,
-            precio: producto.precio,
-            });
-
-            producto.stock -= cantidad;
-            console.info(`${cantidad} ${productoNombre}(s) agregado(s) al carrito`);
-            } else {
-            console.error(`No hay suficiente stock de ${productoNombre}`);
-                }
-        return;
-        }
+//add items
+d.addEventListener("click", function(e) {
+    if (!e.target.matches(".AddButton")){
+        return false;
     }
-    console.error(`El producto "${productoNombre}" no existe.`);
-    }
-
-  // Instrucción 3
-    function calcularTotal() {
-        let total = 0;
-            for (let item of carrito) {
-            total += item.precio * item.cantidad;
-            }
     
-    return total;
+    
+    const $product = e.target.parentElement;
+    
+    let id = $product.getAttribute("data-id");
+    let name = $product.getAttribute("data-nombre");
+    let price = parseFloat($product.getAttribute("data-precio"));
+    
+    
+    let subtotal = 0;
+
+
+    for (const element of productIDs) {
+        console.log(element)
     }
 
-  // Instrucción 4
-    function aplicarDescuento(total) {
-    if (total > 100) {
-      return total * 0.9;
+    if (!productIDs.includes(id)){
+        
+        productIDs.push(id);
+        
+   
+        
+        const $itemcart = d.createElement("li");
+        $itemcart.innerHTML = `<div class="Item${id}" data-quant="1">
+        <h3>${name} - $${price}</h3>
+        <div>Cantidad: 
+        <div class="ProductQuantity${id}"> 1 </div>
+        <button class="ModifyButton" data-behaviour="down" data-id="${id}" data-precio="${price}" >-</button>
+        <button class="ModifyButton" data-behaviour="up" data-id="${id}" data-precio="${price}">+</button>
+        <div class="ProductSubtotal${id}">Subtotal: $${price}</div>
+        <button class="EraseButton" data-behaviour="up" data-id="${id}">Quitar del Carrito</button>
+        </div>
+        `;
+        
+        $listaCarrito.appendChild($itemcart);
+    } else {
+
+        let $itemquant = d.querySelector(".Item"+id);
+        let $itemquantdisplay = d.querySelector(".ProductQuantity"+id);
+        let $itemsubtotal = d.querySelector(".ProductSubtotal"+id);
+        let quant = parseFloat($itemquant.getAttribute("data-quant"));
+        quant++;
+        
+        $itemsubtotal.innerText = "Subtotal: $" + quant * price;
+
+        $itemquantdisplay.innerText = quant;
+        $itemquant.setAttribute("data-quant",quant)
+
+        console.log(price);
     }
 
-    return total;
-    }
+    let total = parseFloat($totalCarrito.innerText);
 
-  //Instrucción 5
-    function procesarCompra() {
-    console.log("Procesando compra...");
-    let tiempoRestante =3;
-    let intervalo = setInterval(function () {
-        if (tiempoRestante > 0) {
-            console.log(`Tiempo restante: ${tiempoRestante} segundos`);
-            tiempoRestante--;
-        } else {
-            clearInterval(intervalo);
+
+
+    $totalCarrito.innerText = (total + price).toFixed(2);
+    
+        
+    
+});
+
+
+d.addEventListener("click", function(e) {
+    if (!e.target.matches(".ModifyButton")){
+        return false;
+    }
+    
+    
+
+    const $button = e.target;
+    
+    let id = $button.getAttribute("data-id");
+    
+    console.log(id);
+
+    let $item = d.querySelector(".Item"+id);
+    let $itemquantdisplay = d.querySelector(".ProductQuantity"+id);
+    let $itemsubtotal = d.querySelector(".ProductSubtotal"+id);
+
+
+    let price = parseFloat($button.getAttribute("data-precio"));
+    let quant = parseFloat($item.getAttribute("data-quant"));
+
+    console.log(price)
+
+    let $value = $button.getAttribute("data-behaviour");
+
+    if($value === "up"){
+        quant++;
+        
+        $itemsubtotal.innerText = "Subtotal: $" + quant * price;
+
+        $itemquantdisplay.innerText = quant;
+        $item.setAttribute("data-quant",quant)
+
+        let total = parseFloat($totalCarrito.innerText);
+
+        $totalCarrito.innerText = (total + price).toFixed(2);
+    } else if ($value === "down"){
+        quant--;
+        
+        $itemsubtotal.innerText = "Subtotal: $" + quant * price;
+
+        $itemquantdisplay.innerText = quant;
+        $item.setAttribute("data-quant",quant)
+
+        let total = parseFloat($totalCarrito.innerText);
+        
+
+        $totalCarrito.innerText = (total - price).toFixed(2);
+
+        if (quant == 0){
+            eliminate(id);
         }
-    }, 1000);
-    setTimeout(function () {
-        let total = calcularTotal();
-        total = aplicarDescuento(total);
-        console.log(`Compra completada. Total a pagar: $${total.toFixed(2)}`);
-        carrito = [];
-        console.log(carrito);
-    }, tiempoRestante * 1000);
     }
 
-  // Instrucción 6
-    agregarAlCarrito("Pantalones", 3);
-    agregarAlCarrito("Pantalones", 4);
-    agregarAlCarrito("Pantalones", 4);
-    agregarAlCarrito("Zapatos", 2);
-    agregarAlCarrito("Camisetas", 3);
-    agregarAlCarrito("Camiseta", 3);
-    agregarAlCarrito("Pantalones", 2);
-    console.log(carrito);
-    procesarCompra();
+});
+
+
+
+d.addEventListener("click", function(e) {
+    if (!e.target.matches(".EraseButton")){
+        return false;
+    }
+    
+    
+
+    const $button = e.target;
+    
+    let id = $button.getAttribute("data-id");
+    
+    console.log(id);
+
+    let $itemsubtotal = d.querySelector(".ProductSubtotal"+id);
+
+    let subtotalmoney = parseFloat($itemsubtotal.innerText.split("$")[1])
+
+    let total = parseFloat($totalCarrito.innerText);
+
+    $totalCarrito.innerText = (total - subtotalmoney).toFixed(2);
+
+    eliminate(id);
+
+});
+
+
+
+$listaCarrito.addEventListener("click", function(e) {
+    if(e.target.tagName === "LI"){
+        const $item = e.target;
+        $item.remove();
+        
+        let price = parseFloat($item.innerText.split("- $")[1]);
+
+        let total = parseFloat($totalCarrito.innerText);
+        
+        $totalCarrito.innerText = (total - price).toFixed(2);
+        
+    }
+})
+
+$btnCompra.addEventListener("click", function(e) {
+    if($listaCarrito.children.length > 0){
+
+        $loader.classList.remove("hidden");
+        setTimeout(() => {
+            $mensajeCompra.classList.remove("hidden");
+            $loader.classList.add("hidden");
+        }, 5000);
+    } else {
+        alert("No hay articulos en el Carrito");
+    }
+});
+
+
+
+
+function eliminate(id){
+    let $item = d.querySelector(".Item"+id);
+    const $product = $item.parentElement;
+    removeItemOnce(productIDs,id);
+    $product.remove();
+    console.log(productIDs);
+}
+
+function removeItemOnce(arr, value) {
+    var index = arr.indexOf(value);
+    if (index > -1) {
+      arr.splice(index, 1);
+    }
+    return arr;
+  }
