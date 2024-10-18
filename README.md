@@ -13,3 +13,5 @@ practica 5: https://warcilac9.github.io/Practica5toSem/practica5/index.html
 practica 6: https://warcilac9.github.io/Practica5toSem/practica6/index.html
 
 practica 7: https://warcilac9.github.io/Practica5toSem/practica7/index.html
+
+practica 8: https://warcilac9.github.io/Practica5toSem/practica8/index.html
